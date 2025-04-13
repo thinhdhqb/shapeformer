@@ -19,13 +19,13 @@ class ShapeletDiscover():
         self.processes = processes
 
     # save list_group_ppi with pickle
-    def save_shapelet_candidates(self, path="store/s1.pkl"):
+    def save_shapelet_candidates(self, path="/kaggle/working/shapeformer/store/s1.pkl"):
         file = open(path, 'wb')
         pickle.dump(self.list_group_ppi, file)
         file.close()
 
     # load shapelet information from disk
-    def load_shapelet_candidates(self, path="store/s1.pkl"):
+    def load_shapelet_candidates(self, path="/kaggle/working/shapeformer/store/s1.pkl"):
         file = open(path, 'rb')
         ppi = pickle.load(file)
         if ppi is not None:
