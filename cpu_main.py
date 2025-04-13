@@ -14,7 +14,7 @@ warnings.warn = warn
 logger = logging.getLogger('__main__')
 parser = argparse.ArgumentParser()
 # -------------------------------------------- Input and Output --------------------------------------------------------
-parser.add_argument('--data_path', default='Dataset/UEA/', choices={'Dataset/UEA/', 'Dataset/Segmentation/'},
+parser.add_argument('--data_path', default='/kaggle/input/uea-dataset', choices={'/kaggle/input/uea-dataset', 'Dataset/Segmentation/'},
                     help='Data path')
 parser.add_argument('--output_dir', default='Results',
                     help='Root output directory. Must exist. Time-stamped directories will be created inside.')
