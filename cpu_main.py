@@ -62,12 +62,12 @@ if __name__ == '__main__':
                                                   processes=args.processes, len_of_ts=len_ts, dim=dim)
             print("extract_candidate...")
             shapelet_discovery.extract_candidate(train_data=train_data)
-            sc_path = "store/" + problem + "_sd.pkl"
+            sc_path = "/kaggle/working/shapeformer/store/" + problem + "_sd.pkl"
             file = open(sc_path, 'wb')
             pickle.dump(shapelet_discovery, file)
             file.close()
         else:
-            sc_path = "store/" + problem + "_sd.pkl"
+            sc_path = "/kaggle/working/shapeformer/store/" + problem + "_sd.pkl"
             file = open(sc_path, 'rb')
             shapelet_discovery = pickle.load(file)
             file.close()
@@ -76,7 +76,7 @@ if __name__ == '__main__':
             print("window_size:%s" % args.window_size)
             config['window_size'] = args.window_size
 
-            sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
+            sc_path = "/kaggle/working/shapeformer/store/" + problem + "_" + str(args.window_size) + ".pkl"
             shapelet_discovery.set_window_size(args.window_size)
             print("discovery...")
             shapelet_discovery.discovery(train_data=train_data, train_labels=train_label, flag=config['dis_flag'])
