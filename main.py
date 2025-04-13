@@ -25,7 +25,7 @@ warnings.warn = warn
 logger = logging.getLogger('__main__')
 parser = argparse.ArgumentParser()
 # -------------------------------------------- Input and Output --------------------------------------------------------
-parser.add_argument('--data_path', default='Dataset/UEA/', choices={'Dataset/UEA/', 'Dataset/Segmentation/'},
+parser.add_argument('--data_path', default='/kaggle/input/uea-dataset', choices={'/kaggle/input/uea-dataset', 'Dataset/Segmentation/'},
                     help='Data path')
 parser.add_argument('--output_dir', default='Results',
                     help='Root output directory. Must exist. Time-stamped directories will be created inside.')
@@ -106,7 +106,7 @@ if __name__ == '__main__':
         # -------------------------------------------- Shapelet Discovery ----------------------------------------------
         shapelet_discovery = ShapeletDiscover(window_size=args.window_size, num_pip=args.num_pip,
                                               processes=args.processes, len_of_ts=len_ts, dim=dim)
-        sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
+        sc_path = "/kaggle/working/shapeformer/store/" + problem + "_" + str(args.window_size) + ".pkl"
         if args.pre_shapelet_discovery == 1:
             shapelet_discovery.load_shapelet_candidates(path=sc_path)
         else:
