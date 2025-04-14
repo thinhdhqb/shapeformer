@@ -14,7 +14,7 @@ warnings.warn = warn
 logger = logging.getLogger('__main__')
 parser = argparse.ArgumentParser()
 # -------------------------------------------- Input and Output --------------------------------------------------------
-parser.add_argument('--data_path', default='/kaggle/input/uea-dataset', choices={'/kaggle/input/uea-dataset', 'Dataset/Segmentation/'},
+parser.add_argument('--data_path', default='/kaggle/input/uea-dataset/', choices={'/kaggle/input/uea-dataset/', 'Dataset/Segmentation/'},
                     help='Data path')
 parser.add_argument('--output_dir', default='Results',
                     help='Root output directory. Must exist. Time-stamped directories will be created inside.')
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     print(list_dataset_name)
     for problem in list_dataset_name[config['dataset_pos']:config['dataset_pos'] + 1]:  # for loop on the all datasets in "data_dir" directory
         print("Problem: %s" % problem)
-        config['data_dir'] = config['data_path'] +"/"+ problem
+        config['data_dir'] = config['output_dir'] +"/"+ problem
         # ------------------------------------ Load Data ---------------------------------------------------------------
         logger.info("Loading Data ...")
         Data = Data_Loader(config)
