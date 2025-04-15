@@ -25,6 +25,7 @@ def Setup(args):
     # Create output directory
     initial_timestamp = datetime.now()
     output_dir = config['output_dir']
+    print("Output dir:" + output_dir);
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
 
