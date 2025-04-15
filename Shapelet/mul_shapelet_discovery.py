@@ -182,9 +182,9 @@ class ShapeletDiscover():
 
         self.list_start_pos = np.ones(self.len_of_ts, dtype=int)
         self.list_end_pos = np.ones(self.len_of_ts, dtype=int) * (self.window_size * 2 + 1)
-        for i in range(self.window_size):
+        for i in range(int(self.window_size)):
             self.list_end_pos[-(i + 1)] -= self.window_size - i
-        for i in range(self.window_size - 1):
+        for i in range(int(self.window_size - 1)):
             self.list_start_pos[i] += self.window_size - i - 1
 
         # Divide time series into group of label
