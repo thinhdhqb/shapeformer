@@ -91,11 +91,11 @@ def Data_Verifier(config):
     if directories:
         print(f"The {config['data_path'].split('/')[-2]} data is already existed")
     else:
-        if config['data_path'].split('/')[1] == 'UEA':
+        if config['data_path'].split('/')[1] == 'uea-dataset':
             file_url = 'http://www.timeseriesclassification.com/Downloads/Archives/Multivariate2018_ts.zip'
             Downloader(file_url, 'UEA')
 
-    if config['data_path'].split('/')[-2] == 'UEA':
+    if config['data_path'].split('/')[-2] == 'uea-dataset':
         config['data_path'] = os.path.join(config['data_path'], 'Multivariate_ts')
 
 
