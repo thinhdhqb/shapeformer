@@ -25,7 +25,7 @@ def Setup(args):
     # Create output directory
     initial_timestamp = datetime.now()
     output_dir = config['output_dir']
-    print("Output dir:" + output_dir);
+    
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
 
@@ -35,7 +35,7 @@ def Setup(args):
     config['pred_dir'] = os.path.join(output_dir, 'predictions')
     config['tensorboard_dir'] = os.path.join(output_dir, 'tb_summaries')
     create_dirs([config['save_dir'], config['pred_dir'], config['tensorboard_dir']])
-
+    print("Output dir:" + output_dir);
     # Save configuration as a (pretty) json file
     with open(os.path.join(output_dir, 'configuration.json'), 'w') as fp:
         json.dump(config, fp, indent=4, sort_keys=True)
