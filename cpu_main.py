@@ -39,6 +39,7 @@ if __name__ == '__main__':
     device = Initialization(config)
     Data_Verifier(config)  # Download thex UEA and HAR datasets if they are not in the directory
     All_Results = ['Datasets', 'ConvTran']  # Use to store the accuracy of ConvTran in e.g "Result/Datasets/UEA"
+    print(config['data_path'])
     list_dataset_name = os.listdir(config['data_path'])
     list_dataset_name.sort()
     print(list_dataset_name)
