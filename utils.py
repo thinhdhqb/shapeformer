@@ -90,7 +90,7 @@ def Data_Verifier(config):
         print(f"The {config['data_path'].split('/')[-2]} data is already existed")
     else:
         if config['data_path'].split('/')[1] == 'UEA':
-            file_url = 'http://www.timeseriesclassification.com/Downloads/Archives/Multivariate2018_ts.zip'
+            file_url = 'http://www.timeseriesclassification.com/aeon-toolkit/Archives/Multivariate2018_ts.zip'
             Downloader(file_url, 'UEA')
 
     if config['data_path'].split('/')[-2] == 'UEA':
