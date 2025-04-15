@@ -24,6 +24,7 @@ warnings.warn = warn
 
 logger = logging.getLogger('__main__')
 parser = argparse.ArgumentParser()
+
 # -------------------------------------------- Input and Output --------------------------------------------------------
 parser.add_argument('--data_path', default='Dataset/UEA/', choices={'Dataset/UEA/', 'Dataset/Segmentation/'},
                     help='Data path')
