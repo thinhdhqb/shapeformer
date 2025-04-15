@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 # -------------------------------------------- Input and Output --------------------------------------------------------
 parser.add_argument('--data_path', default='/kaggle/input/uea-dataset', choices={'/kaggle/input/uea-dataset', 'Dataset/Segmentation/'},
                     help='Data path')
-parser.add_argument('--output_dir', default='Results',
+parser.add_argument('--output_dir', default='/kaggle/working',
                     help='Root output directory. Must exist. Time-stamped directories will be created inside.')
 parser.add_argument('--Norm', type=bool, default=False, help='Data Normalization')
 parser.add_argument('--val_ratio', type=float, default=0.5, help="Proportion of the train-set to be used as validation")
