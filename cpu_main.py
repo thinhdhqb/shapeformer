@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
         if args.window_size <= int(len_ts / 2):
             print("window_size:%s" % args.window_size)
-            config['window_size'] = args.window_size
+            config['window_size'] = int(args.window_size)
 
             sc_path = "store/" + problem + "_" + str(args.window_size) + ".pkl"
             shapelet_discovery.set_window_size(args.window_size)
