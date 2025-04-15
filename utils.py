@@ -84,7 +84,7 @@ def Data_Verifier(config):
     if not os.path.exists(config['data_path']):
         os.makedirs(os.path.join(os.getcwd(), config['data_path']))
     directories = [name for name in os.listdir(config['data_path']) if os.path.isdir(os.path.join(config['data_path'], name))]
-
+    print(config['data_path'])
     if directories:
         print(f"The {config['data_path'].split('/')[-2]} data is already existed")
     else:
