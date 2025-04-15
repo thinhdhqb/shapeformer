@@ -29,6 +29,7 @@ def Setup(args):
     if not os.path.isdir(output_dir):
         os.makedirs(output_dir)
     print("Output dir:" + output_dir);
+    print("Datapath: " + config['data_path'])
     output_dir = os.path.join(output_dir, initial_timestamp.strftime("%Y-%m-%d_%H-%M"))
     print("Output dir:" + output_dir);
     config['output_dir'] = output_dir
