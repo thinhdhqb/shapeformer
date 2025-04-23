@@ -118,7 +118,8 @@ if __name__ == '__main__':
             print("shapelet discovery time: %s" % (time.time() - time_s))
 
         shapelets_info = shapelet_discovery.get_shapelet_info(number_of_shapelet=args.num_shapelet)
-
+        print("Shapelet info")
+        print(shapelets_info)
         #
         sw = torch.tensor(shapelets_info[:,3])
         sw = torch.softmax(sw*20, dim=0)*sw.shape[0]
