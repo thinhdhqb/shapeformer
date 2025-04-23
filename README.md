@@ -20,7 +20,7 @@ python main.py --dataset_pos=[dataset_pos] --num_shapelet=[num_shapelet] --windo
 
 Here, [dataset_pos], [num_shapelet] and [window_size] can be selected as follows:
 
-| Dataset                   | [dataset_pos] | [window_size] | [num_shapelet] |
+| Dataset                   | [dataset_pos] | [window_size] | [num_shapelet] |  
 |---------------------------|---------------|---------------|----------------|
 | ArticularyWordRecognition | 0             | 50            | 10             |
 | AtrialFibrillation        | 1             | 100           | 3              |

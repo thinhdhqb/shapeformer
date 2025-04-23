@@ -98,6 +98,8 @@ if __name__ == '__main__':
         logger.info("Loading Data ...")
         Data = Data_Loader(config)
         train_data = Data['train_data']
+        print("train_data:")
+        print(train_data)
         train_label = Data['train_label']
         len_ts = Data['max_len']
         dim = train_data.shape[1]
