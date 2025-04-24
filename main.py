@@ -80,8 +80,8 @@ parser.add_argument('--gpu', type=int, default='0', help='GPU index, -1 for CPU'
 parser.add_argument('--console', action='store_true', help="Optimize printout for console output; otherwise for file")
 parser.add_argument('--seed', default=1, type=int, help='Seed used for splitting sets')
 
-parser.add_argument('--shapelet-std', default=0, type=float, help='Standard deviation of shapelet noise')
-parser.add_argument('--non-shapelet-std', default=0, type=float, help='Standard deviation of non-shapelet noise')
+parser.add_argument('--shapelet_std', default=0, type=float, help='Standard deviation of shapelet noise')
+parser.add_argument('--non-shapelet_std', default=0, type=float, help='Standard deviation of non-shapelet noise')
 
 args = parser.parse_args()
 def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1, non_shapelet_std=0.5):
@@ -129,8 +129,6 @@ if __name__ == '__main__':
         logger.info("Loading Data ...")
         Data = Data_Loader(config)
         train_data = Data['train_data']
-        print(Data)
-        print(train_data)
         train_label = Data['train_label']
         len_ts = Data['max_len']
         dim = train_data.shape[1]
@@ -151,8 +149,6 @@ if __name__ == '__main__':
             print("shapelet discovery time: %s" % (time.time() - time_s))
 
         shapelets_info = shapelet_discovery.get_shapelet_info(number_of_shapelet=args.num_shapelet)
-        print("Shapelet info")
-        print(shapelets_info)
         #
         sw = torch.tensor(shapelets_info[:,3])
         sw = torch.softmax(sw*20, dim=0)*sw.shape[0]
