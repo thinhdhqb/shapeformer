@@ -80,6 +80,9 @@ parser.add_argument('--gpu', type=int, default='0', help='GPU index, -1 for CPU'
 parser.add_argument('--console', action='store_true', help="Optimize printout for console output; otherwise for file")
 parser.add_argument('--seed', default=1, type=int, help='Seed used for splitting sets')
 
+parser.add_argument('--shapelet-std', default=0, type=float, help='Standard deviation of shapelet noise')
+parser.add_argument('--non-shapelet-std', default=0, type=float, help='Standard deviation of non-shapelet noise')
+
 args = parser.parse_args()
 def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1, non_shapelet_std=0.5):
     """Add different levels of noise to shapelet and non-shapelet regions"""
@@ -157,8 +160,8 @@ if __name__ == '__main__':
         Data['All_train_data'] = augment_time_series_with_noise(
             Data['All_train_data'], 
             shapelets_info,
-            shapelet_std=0.1,
-            non_shapelet_std=0.5
+            shapelet_std=args.__dict__['shapelet_std'],
+            non_shapelet_std=args.__dict__['non_shapelet_std']
         )
         print(shapelets_info.shape)
         shapelets = []
