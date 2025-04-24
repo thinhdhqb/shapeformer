@@ -81,7 +81,7 @@ parser.add_argument('--console', action='store_true', help="Optimize printout fo
 parser.add_argument('--seed', default=1, type=int, help='Seed used for splitting sets')
 
 parser.add_argument('--shapelet_std', default=0, type=float, help='Standard deviation of shapelet noise')
-parser.add_argument('--non-shapelet_std', default=0, type=float, help='Standard deviation of non-shapelet noise')
+parser.add_argument('--non_shapelet_std', default=0, type=float, help='Standard deviation of non-shapelet noise')
 
 args = parser.parse_args()
 def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1, non_shapelet_std=0.5):
