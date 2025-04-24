@@ -81,7 +81,35 @@ parser.add_argument('--console', action='store_true', help="Optimize printout fo
 parser.add_argument('--seed', default=1, type=int, help='Seed used for splitting sets')
 
 args = parser.parse_args()
-
+def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1, non_shapelet_std=0.5):
+    """Add different levels of noise to shapelet and non-shapelet regions"""
+    augmented_series = time_series.copy()
+    
+    # Create a mask for all positions (initially all True for non-shapelet parts)
+    non_shapelet_mask = np.ones_like(augmented_series, dtype=bool)
+    
+    # Mark shapelet regions in the mask
+    for si in shapelets_info:
+        ts_idx = int(si[0])  # time series index
+        dim = int(si[5])     # dimension
+        start = int(si[1])   # start position
+        end = int(si[2])     # end position
+        
+        # Set shapelet regions to False in non_shapelet_mask
+        non_shapelet_mask[ts_idx, dim, start:end] = False
+        
+        # Add low noise to shapelet regions
+        augmented_series[ts_idx, dim, start:end] += np.random.normal(
+            0, shapelet_std, size=(end - start)
+        )
+    
+    # Add higher noise to non-shapelet regions
+    non_shapelet_indices = np.where(non_shapelet_mask)
+    augmented_series[non_shapelet_indices] += np.random.normal(
+        0, non_shapelet_std, size=len(non_shapelet_indices[0])
+    )
+    
+    return augmented_series
 
 if __name__ == '__main__':
     config = Setup(args)  # configuration dictionary
@@ -98,7 +126,7 @@ if __name__ == '__main__':
         logger.info("Loading Data ...")
         Data = Data_Loader(config)
         train_data = Data['train_data']
-        print("train_data:")
+        print(Data)
         print(train_data)
         train_label = Data['train_label']
         len_ts = Data['max_len']
@@ -126,7 +154,12 @@ if __name__ == '__main__':
         sw = torch.tensor(shapelets_info[:,3])
         sw = torch.softmax(sw*20, dim=0)*sw.shape[0]
         shapelets_info[:,3] = sw.numpy()
-
+        Data['All_train_data'] = augment_time_series_with_noise(
+            Data['All_train_data'], 
+            shapelets_info,
+            shapelet_std=0.1,
+            non_shapelet_std=0.5
+        )
         print(shapelets_info.shape)
         shapelets = []
         for si in shapelets_info:
