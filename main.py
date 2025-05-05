@@ -82,37 +82,61 @@ parser.add_argument('--seed', default=1, type=int, help='Seed used for splitting
 
 parser.add_argument('--shapelet_std', default=0, type=float, help='Standard deviation of shapelet noise')
 parser.add_argument('--non_shapelet_std', default=0, type=float, help='Standard deviation of non-shapelet noise')
+parser.add_argument('--aug_ratio', default=2, type=int, help='Number of augmented copies to create per instance')
 
 args = parser.parse_args()
-def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1, non_shapelet_std=0.5):
-    """Add different levels of noise to shapelet and non-shapelet regions"""
-    augmented_series = time_series.copy()
+def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1, non_shapelet_std=0.5, num_copies=2):
+    """
+    Create multiple augmented copies of each time series with noise
+    Args:
+        time_series: Input time series data [num_samples, num_dimensions, length]
+        shapelets_info: Shapelet information
+        shapelet_std: Standard deviation for shapelet regions
+        non_shapelet_std: Standard deviation for non-shapelet regions
+        num_copies: Number of augmented copies to create per instance
+    Returns:
+        Tuple of (augmented_data, augmented_labels)
+    """
+    # Create array for augmented copies
+    num_samples = len(time_series)
+    augmented_series = np.tile(time_series, (num_copies, 1, 1))
     
-    # Create a mask for all positions (initially all True for non-shapelet parts)
+    # Create mask for non-shapelet regions
     non_shapelet_mask = np.ones_like(augmented_series, dtype=bool)
     
-    # Mark shapelet regions in the mask
+    # Mark shapelet regions and add noise
     for si in shapelets_info:
-        ts_idx = int(si[0])  # time series index
-        dim = int(si[5])     # dimension
-        start = int(si[1])   # start position
-        end = int(si[2])     # end position
+        orig_ts_idx = int(si[0])  # original time series index
+        dim = int(si[5])     
+        start = int(si[1])   
+        end = int(si[2])     
         
-        # Set shapelet regions to False in non_shapelet_mask
-        non_shapelet_mask[ts_idx, dim, start:end] = False
-        
-        # Add low noise to shapelet regions
-        augmented_series[ts_idx, dim, start:end] += np.random.normal(
-            0, shapelet_std, size=(end - start)
-        )
+        # For each copy of this time series
+        for copy in range(num_copies):
+            ts_idx = orig_ts_idx + (copy * num_samples)
+            
+            # Set shapelet regions to False in mask
+            non_shapelet_mask[ts_idx, dim, start:end] = False
+            
+            # Add low noise to shapelet regions
+            augmented_series[ts_idx, dim, start:end] += np.random.normal(
+                0, shapelet_std, size=(end - start)
+            )
     
-    # Add higher noise to non-shapelet regions
-    non_shapelet_indices = np.where(non_shapelet_mask)
-    augmented_series[non_shapelet_indices] += np.random.normal(
-        0, non_shapelet_std, size=len(non_shapelet_indices[0])
-    )
+    # Add noise to non-shapelet regions
+    for i in range(num_samples):
+        for copy in range(num_copies):
+            ts_idx = i + (copy * num_samples)
+            # Get mask for current instance
+            instance_mask = non_shapelet_mask[ts_idx]
+            # Add noise only to non-shapelet regions of current instance
+            augmented_series[ts_idx, instance_mask] += np.random.normal(
+                0, non_shapelet_std, size=np.sum(instance_mask)
+            )
     
     return augmented_series
+
+
 
 if __name__ == '__main__':
     config = Setup(args)  # configuration dictionary
@@ -153,12 +177,20 @@ if __name__ == '__main__':
         sw = torch.tensor(shapelets_info[:,3])
         sw = torch.softmax(sw*20, dim=0)*sw.shape[0]
         shapelets_info[:,3] = sw.numpy()
-        Data['All_train_data'] = augment_time_series_with_noise(
-            Data['All_train_data'], 
+
+        # Data augmentation
+        augmented_data = augment_time_series_with_noise(
+            Data['train_data'],
             shapelets_info,
-            shapelet_std=args.__dict__['shapelet_std'],
-            non_shapelet_std=args.__dict__['non_shapelet_std']
+            shapelet_std=args.shapelet_std,
+            non_shapelet_std=args.non_shapelet_std,
+            num_copies=args.aug_ratio
         )
+
+        # Combine original and augmented data
+        Data['All_train_data'] = np.concatenate([Data['train_data'], augmented_data], axis=0)
+        Data['All_train_label'] = np.tile(Data['train_label'], args.aug_ratio + 1)
+        
         print(shapelets_info.shape)
         shapelets = []
         for si in shapelets_info:
