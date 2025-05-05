@@ -192,8 +192,8 @@ if __name__ == '__main__':
         # Combine original and augmented data
         print("Data shape before augmentation: ", Data['train_data'].shape)
         print("All_train_data shape before augmentation: ", Data['All_train_data'].shape)
-        Data['All_train_data'] = np.concatenate([Data['train_data'], augmented_data], axis=0)
-        Data['All_train_label'] = np.tile(Data['train_label'], args.aug_ratio + 1)
+        Data['All_train_data'] = np.concatenate([Data['All_train_data'], augmented_data], axis=0)
+        Data['All_train_label'] = np.tile(Data['All_train_label'], args.aug_ratio + 1)
         print("Data shape after augmentation: ", Data['All_train_data'].shape)
         
         print(shapelets_info.shape)
