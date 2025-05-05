@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
         # Data augmentation
         augmented_data = augment_time_series_with_noise(
-            Data['train_data'],
+            Data['All_train_data'],
             shapelets_info,
             shapelet_std=args.shapelet_std,
             non_shapelet_std=args.non_shapelet_std,
