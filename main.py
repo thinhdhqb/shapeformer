@@ -110,6 +110,7 @@ def augment_time_series_with_noise(time_series, shapelets_info, shapelet_std=0.1
         dim = int(si[5])     
         start = int(si[1])   
         end = int(si[2])     
+        print("Shapelet info: ", si)
         
         # For each copy of this time series
         for copy in range(num_copies):
