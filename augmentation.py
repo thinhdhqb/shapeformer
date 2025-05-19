@@ -59,7 +59,7 @@ def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_
         window_size = int(si[2]) - int(si[1])
         
         # Find best matching subsequences and their distances
-        distances, positions = find_best_matching_subsequences(time_series, si, window_size)
+        distances, positions = find_best_matching_subsequences(time_series, si)
         
         # Normalize distances to [0, 1] range
         distances = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))
