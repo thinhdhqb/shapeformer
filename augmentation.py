@@ -15,6 +15,9 @@ def find_best_matching_subsequences(time_series, si):
         # Sliding window over the time series
         for j in range(len(time_series[i, 0]) - window_size + 1):
             # Extract subsequence
+            print(f"Extracting subsequence from time series {i}, position {j}")
+            print("dim:" + str(si[5]))
+            print("window size:" + str(window_size))
             subseq = time_series[i, si[5], j:j+window_size]
             
             # Calculate complexity of subsequence and shapelet
