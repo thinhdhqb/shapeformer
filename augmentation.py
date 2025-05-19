@@ -1,10 +1,13 @@
 import numpy as np
-def find_best_matching_subsequences(time_series, shapelet, window_size):
+def find_best_matching_subsequences(time_series, si):
     """Find best matching subsequences for a shapelet using complexity-invariant distance"""
     num_samples = len(time_series)
     distances = np.zeros(num_samples)
     best_positions = np.zeros(num_samples, dtype=int)
     
+    shapelet = time_series[int(si[0]), int(si[5]), int(si[1]):int(si[2])]
+    window_size = int(si[2]) - int(si[1])
+
     for i in range(num_samples):
         min_dist = float('inf')
         best_pos = 0
@@ -12,7 +15,7 @@ def find_best_matching_subsequences(time_series, shapelet, window_size):
         # Sliding window over the time series
         for j in range(len(time_series[i, 0]) - window_size + 1):
             # Extract subsequence
-            subseq = time_series[i, shapelet[5], j:j+window_size]
+            subseq = time_series[i, si[5], j:j+window_size]
             
             # Calculate complexity of subsequence and shapelet
             ci_subseq = np.sum(np.square(np.diff(subseq)))
@@ -53,11 +56,10 @@ def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_
     # Process each shapelet
     for si in shapelets_info:
         # Extract shapelet
-        shapelet = time_series[int(si[0]), int(si[5]), int(si[1]):int(si[2])]
         window_size = int(si[2]) - int(si[1])
         
         # Find best matching subsequences and their distances
-        distances, positions = find_best_matching_subsequences(time_series, shapelet, window_size)
+        distances, positions = find_best_matching_subsequences(time_series, si, window_size)
         
         # Normalize distances to [0, 1] range
         distances = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))
