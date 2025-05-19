@@ -80,6 +80,7 @@ def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_
         for i in range(num_samples):
             ts_idx = i + (copy * num_samples)
             noise = np.random.normal(0, noise_std, size=time_series.shape[1:])
+            print(f"Noise mask for sample {i}, copy {copy}: {noise_mask[ts_idx]}")
             augmented_series[ts_idx] += noise * noise_mask[ts_idx]
     
     return augmented_series
