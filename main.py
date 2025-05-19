@@ -177,6 +177,7 @@ if __name__ == '__main__':
             noise_std=args.shapelet_std,
             num_copies=args.aug_ratio
         )
+        
         print("augmented_data shape: ", augmented_data.shape)
         print("aug_ratio: ", args.aug_ratio)
 
