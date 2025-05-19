@@ -34,7 +34,7 @@ def find_best_matching_subsequences(time_series, si):
         
         distances[i] = min_dist
         best_positions[i] = best_pos
-        print(f"Sample {i}: Best position {best_pos}, Distance {min_dist}")
+        # print(f"Sample {i}: Best position {best_pos}, Distance {min_dist}")
     
     return distances, best_positions
 
