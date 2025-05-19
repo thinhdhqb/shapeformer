@@ -1,8 +1,14 @@
 import numpy as np
 
-def find_best_matching_subsequences(time_series, shapelet, window_size):
-    """Find best matching subsequences for a shapelet using complexity-invariant distance"""
+def find_best_matching_subsequences(time_series, shapelet_info, dim):
+    """Find best matching subsequences for a shapelet using complexity-invariant distance
+    Args:
+        time_series: Input time series data [num_samples, num_dimensions, length]
+        shapelet_data: The actual shapelet values
+        dim: Dimension where the shapelet was found
+    """
     num_samples = len(time_series)
+    window_size = int(shapelet_info[2]) - int(shapelet_info[1])
     distances = np.zeros(num_samples)
     best_positions = np.zeros(num_samples, dtype=int)
     
@@ -12,15 +18,15 @@ def find_best_matching_subsequences(time_series, shapelet, window_size):
         
         # Sliding window over the time series
         for j in range(len(time_series[i, 0]) - window_size + 1):
-            # Extract subsequence
-            subseq = time_series[i, shapelet[5], j:j+window_size]
+            # Extract subsequence from correct dimension
+            subseq = time_series[i, dim, j:j+window_size]
             
             # Calculate complexity of subsequence and shapelet
             ci_subseq = np.sum(np.square(np.diff(subseq)))
-            ci_shapelet = np.sum(np.square(np.diff(shapelet)))
+            ci_shapelet = np.sum(np.square(np.diff(shapelet_info)))
             
             # Calculate Euclidean distance
-            ed = np.sqrt(np.sum(np.square(subseq - shapelet)))
+            ed = np.sqrt(np.sum(np.square(subseq - shapelet_info)))
             
             # Calculate complexity-invariant distance
             ci_factor = max(ci_subseq, ci_shapelet) / min(ci_subseq, ci_shapelet)
@@ -53,12 +59,11 @@ def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_
     
     # Process each shapelet
     for si in shapelets_info:
-        # Extract shapelet
-        shapelet = time_series[int(si[0]), int(si[5]), int(si[1]):int(si[2])]
-        window_size = int(si[2]) - int(si[1])
+        dim = int(si[5])
+        shapelet_length = int(si[2]) - int(si[1])
         
         # Find best matching subsequences and their distances
-        distances, positions = find_best_matching_subsequences(time_series, shapelet, window_size)
+        distances, positions = find_best_matching_subsequences(time_series, si, dim)
         
         # Normalize distances to [0, 1] range
         distances = (distances - np.min(distances)) / (np.max(distances) - np.min(distances))
@@ -68,7 +73,7 @@ def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_
             for i in range(num_samples):
                 ts_idx = i + (copy * num_samples)
                 start_pos = positions[i]
-                end_pos = start_pos + window_size
+                end_pos = start_pos + shapelet_length
                 
                 # Set mask values for matching subsequence (smaller distance = smaller noise)
                 noise_mask[ts_idx, int(si[5]), start_pos:end_pos] = distances[i]
