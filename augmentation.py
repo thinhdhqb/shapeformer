@@ -1,6 +1,7 @@
 import numpy as np
+
 def find_best_matching_subsequences(time_series, si):
-    """Find best matching subsequences for a shapelet using complexity-invariant distance"""
+    """Find best matching subsequences for a shapelet"""
     num_samples = len(time_series)
     distances = np.zeros(num_samples)
     best_positions = np.zeros(num_samples, dtype=int)
@@ -38,23 +39,16 @@ def find_best_matching_subsequences(time_series, si):
     
     return distances, best_positions
 
-def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_copies=2):
-    """
-    Augment time series using adaptive noise based on shapelet distances
-    Args:
-        time_series: Input time series data [num_samples, num_dimensions, length]
-        shapelets_info: Shapelet information
-        noise_std: Base standard deviation for noise
-        num_copies: Number of augmented copies to create per instance
-    """
+def augment(time_series, shapelets_info, noise_std=0.5, num_copies=2):
+    """ Augment time series using adaptive noise based on shapelet distances """
     num_samples = len(time_series)
     ts_length = time_series.shape[2]
     augmented_series = np.tile(time_series, (num_copies, 1, 1))
     
-    # Initialize mask with ones (maximum noise)
+    # Noise mask (1 for non-matching subsequences)
     noise_mask = np.ones((num_copies * num_samples, time_series.shape[1], ts_length))
     
-    # Process each shapelet
+    # Set noise mask for best matching subsequences
     for si in shapelets_info:
         # Extract shapelet
         window_size = int(si[2]) - int(si[1])
@@ -75,7 +69,7 @@ def augment_with_adaptive_noise(time_series, shapelets_info, noise_std=0.5, num_
                 # Set mask values for matching subsequence (smaller distance = smaller noise)
                 noise_mask[ts_idx, int(si[5]), start_pos:end_pos] = distances[i]
     
-    # Generate and apply adaptive noise
+    # Apply noise
     for copy in range(num_copies):
         for i in range(num_samples):
             ts_idx = i + (copy * num_samples)

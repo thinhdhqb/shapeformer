@@ -16,7 +16,7 @@ from Models.utils import load_model
 from Training import SupervisedTrainer, train_runner
 from Shapelet.mul_shapelet_discovery import ShapeletDiscover
 import torch
-from augmentation import find_best_matching_subsequences, augment_with_adaptive_noise
+from augmentation import augment
 
 def warn(*args, **kwargs):
     pass
@@ -171,7 +171,7 @@ if __name__ == '__main__':
         #     non_shapelet_std=args.non_shapelet_std,
         #     num_copies=args.aug_ratio
         # )
-        augmented_data = augment_with_adaptive_noise(
+        augmented_data = augment(
             Data['All_train_data'],
             shapelets_info,
             noise_std=args.shapelet_std,
